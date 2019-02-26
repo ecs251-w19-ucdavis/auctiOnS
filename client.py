@@ -1,23 +1,22 @@
 import os, sys, time
-import requests
+import requests as req
 
 class client(object):
-    def __init__(self):
-        self.client_id          = None          # id for this client
+    def __init__(self, name):
+        self.username           = name          # username for this client
         self.server_id          = None          # which server the client is connect to
         self.account_balance    = 10000.0       # current balance of the client, part of bidding decision factor
         self.current_item       = None          # current item id that's in auction
-        self.current_price      = 0.0           # current bid amount
+        self.current_price      = None           # current bid amount
         self.current_bid_owner  = None          # current highest bid holder, a client id d
         self.minimum_increment  = 0.0           # current minimum increment of the item under auction
-
         self.register()
         
 
     def show(self):
         # show client status
         print(f'''
-        	client id: 			{self.client_id}
+        	client id: 		{self.username}
         	account balance:	{self.account_balance}
         	current server: 	{self.server_id}
         	current item: 		{self.current_item}
@@ -25,9 +24,9 @@ class client(object):
         	current bid owner: 	{self.current_bid_owner}
         	current MI: 		{self.minimum_increment}
         	''')
-
-    def set_balance(self, amount):
-        self.account_balance = amount
+    # Registers this user to server.
+    def register(self):
+        self.receive(req.post('http://localhost:3001/register', data={'username' : self.username} ).json())
 
     def check(self):
         # send chk request, receive
@@ -35,64 +34,52 @@ class client(object):
         # self.receive(r)
         self.receive('check')
 
-    def register(self):
-        # send register request (reg), wait for confirmation, set client_id
-        r = requests.get('https://google.com/')
-        # self.receive(r)
-        self.receive('register')
-
+    # (TODO) Decides whether to bid.
     def bid(self):
-        # decide whether to bid or not, send bid request (bid) with [item#, price, client_id], receive succ/fail from server
-        if True:
-            should_bid = True
-        if should_bid:
-            r = requests.get('https://google.com/')
-            # self.receive(r)
-            self.receive('accpet')
+        return
 
-    def update(self):
-        '''main loop, check listing, and try to bid'''
-        count = 0
-        while True:
-            self.check()
-            if self.current_price < self.account_balance:
-                self.bid()
-            else:
-                print(self.current_price, self.account_balance)
-                time.sleep(5)
+    # (TODO) Executes the loop to decide to bid or go to sleep. 
+    def bidding(self):
+        #while self.current_price < self.account_balance:
+        #    self.update_info()
+        #    payload = self.bid()
+        #    if payload is not None:
+        #        r = requests.get('server.com/', params=payload)
+        #    else:
+        #        print(self.current_price, self.account_balance)
+        #        time.sleep(5)
+        #self.show()
+        return
 
-            count += 1
-            if count > 1:
-                break
-        self.show()
-
+    # (TODO) Updates local information according to server response.
     def receive(self, response):
         # parse response
-        mode = response
-        my_price = 1001
+        if not response:
+            ptinf('Error response received.')
+            return
+        op = reqponse['op']
         # registration confirmation
-        if mode == 'register':
-            self.client_id = 'temp_id'
-            self.server_id = 'temp_server'
+        if op == 'register':
+            self.server_id = response['server_id']
         # check listings, update internal information
-        elif mode == 'check':
-            self.current_price = 1000
-            self.current_bid_owner = 'current_bid_owner'
-            self.minimum_increment = 'MI'
-    	# bid accept
-        elif mode == 'accept':
-            self.current_bid_owner = self.client_id
-            self.current_price = my_price # my_price should be parse from http response
-    	# new item notification
-        elif mode == 'new':
-            self.current_item = 'new_item'
-            self.current_price = 1000
-            self.current_bid_owner = 'current_bid_owner'
-            self.minimum_increment = 'MI'
-            # update account balance if won the bid
-            self.account_balance = 900
+        #elif op == 'check':
+        #    self.current_price = response['cur_price']
+        #    self.current_bid_owner = response['cur_bid_owner']
+        #    self.minimum_increment = response['MI']
+    	## bid accept
+        #elif op == 'bid':
+        #    self.current_item_owner = response['cur_item_owner']
+        #    self.current_price = response['cur_item_price'] # my_price should be parse from http response
+    	## new item notification
+        #elif op == 'new':
+        #    self.current_item = 'new_item'
+        #    self.current_price = 1000
+        #    self.current_bid_owner = 'current_bid_owner'
+        #    self.minimum_increment = 'MI'
+        #    # update account balance if won the bid
+        #    self.account_balance = 900
 
 if __name__ == '__main__':
-    c = client()
+    c = client('test_name')
     c.register()
-    c.update()
+    #c.bidding()
