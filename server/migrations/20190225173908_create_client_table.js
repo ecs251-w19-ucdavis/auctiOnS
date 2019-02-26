@@ -1,7 +1,7 @@
 
 exports.up = function(knex, Promise) {
     return removeForeignKeyChecks()
-        .then(createItemTable)
+        .then(createClientTable)
 
     function removeForeignKeyChecks() {
         return knex.raw('SET foreign_key_checks = 0;');
@@ -11,13 +11,10 @@ exports.up = function(knex, Promise) {
         return knex.raw('SET foreign_key_checks = 1;');
     }
 
-    function createItemTable() {
-        return knex.schema.createTable('Item', function (table) {
+    function createClientTable() {
+        return knex.schema.createTable('Client', function (table) {
             table.increments('id').primary().unsigned();
-            table.text('item_name').notNullable();
-            table.text('current_owner').notNullable();
-            table.integer('bin_price').notNullable();
-            table.integer('min_increment').notNullable();
+            table.text('client_name').notNullable();
         });
     }
 };
@@ -25,7 +22,7 @@ exports.up = function(knex, Promise) {
 exports.down = function(knex, Promise) {
     knex.raw('SET foreign_key_checks = 0;'),
 
-    knex.schema.dropTable('Item'),
+    knex.schema.dropTable('Client'),
 
     knex.raw('SET foreign_key_checks = 1;')
 };
