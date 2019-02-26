@@ -81,6 +81,11 @@ celerybeat-schedule
 # SageMath parsed files
 *.sage.py
 
+# Sever dependency directories
+node_modules/
+.DS_Store
+yarn.lock
+
 # Environments
 .env
 .venv
