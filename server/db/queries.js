@@ -4,8 +4,7 @@ import moment from 'moment'
 module.exports = {
     Auction: {
         register: function(name) {
-            console.log(name)
-            return name
+            return knex('Client').insert({client_name: name})
         },
         getItemInfo: function() {
             // const curDate =  moment().add(1, 'day').format('YYYY-MM_DD')

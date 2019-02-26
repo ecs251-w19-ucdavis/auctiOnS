@@ -26,7 +26,7 @@ class client(object):
         	''')
     # Registers this user to server.
     def register(self):
-        self.receive(req.post('http://localhost:3001/register', data={'username' : self.username} ).json())
+        self.receive(req.post('http://localhost:3001/register', data={'username' : self.username}).json())
 
     def check(self):
         # send chk request, receive
@@ -55,9 +55,9 @@ class client(object):
     def receive(self, response):
         # parse response
         if not response:
-            ptinf('Error response received.')
+            print('Error response received.')
             return
-        op = reqponse['op']
+        op = response['op']
         # registration confirmation
         if op == 'register':
             self.server_id = response['server_id']

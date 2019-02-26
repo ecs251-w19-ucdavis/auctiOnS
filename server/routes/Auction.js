@@ -3,11 +3,13 @@ import queries from '../db/queries';
 const router = express.Router();
 
 router.post('/register', (req, res) => {
-    // console.log(req)
-    queries.Auction.register(req.query.user_name)
+    queries.Auction.register(req.body.username).then(data => {
+        const d = {'op': 'register', 'server_id': 0}
+        res.json(d)
+    })
 })
 router.get('/getItemInfo', (req, res) => {
-    queries.Auction.getItemInfo().then(data =>{
+    queries.Auction.getItemInfo().then(data => {
         res.json(data)
     })
 })
