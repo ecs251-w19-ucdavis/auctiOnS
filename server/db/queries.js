@@ -3,6 +3,10 @@ import moment from 'moment'
 
 module.exports = {
     Auction: {
+        checkClientName: function(name){
+            const client = knex('Client').where({client_name: name})
+            return client
+        },
         register: function(name) {
             return knex('Client').insert({client_name: name})
         },
