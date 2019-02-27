@@ -10,7 +10,8 @@ router.post('/register', (req, res) => {
 })
 router.get('/getItemInfo', (req, res) => {
     queries.Auction.getItemInfo().then(data => {
-        res.json(data)
+        console.log(data[0])
+        res.json(data[0])
     })
 })
 
