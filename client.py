@@ -2,6 +2,7 @@ import os, sys, time
 import requests as req
 import argparse
 from random import randint
+import numpy as np
 
 class client(object):
     def __init__(self, username, budget, server):
@@ -33,12 +34,24 @@ class client(object):
     def register(self):
         self.receive(req.post(self.SERVER + '/register', data={'username' : self.username}).json())
 
+    def select_num_mi(self, num):
+        weights = [x**3 for x in range(1,num+2)][::-1]
+        total = sum(weights)
+        p = [x / total for x in weights]
+        choices = list(range(1,num+1))
+        choices.append(0)
+        selection = int(np.random.choice(np.array(choices), p = np.array(p)))
+        return selection
     # (TODO) Decides whether to bid.
     def bid(self):
         if self.current_owner == self.username or \
                 self.budget < self.current_price + self.increment:
             return False
         else:
+            max_inc = min(self.budget, self.bin_price) - self.current_price
+            max_num_mi = min(max_inc // self.increment, 5)
+
+            self.num_mi = self.select_num_mi(max_num_mi)
             return True
 
     # (TODO) Executes the loop to decide to bid or go to sleep. 
