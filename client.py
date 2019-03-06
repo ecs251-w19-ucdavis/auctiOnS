@@ -1,5 +1,6 @@
 import os, sys, time
 import requests as req
+from random import randint
 
 SERVER = 'http://localhost:3001'
 
@@ -11,9 +12,9 @@ class client(object):
         self.balance            = 10000.0       # current balance of the client, part of bidding decision factor
         self.item_name          = None          # current item id that's in auction
         self.current_price      = None           # current bid amount
-        self.my_price           = None
         self.current_owner      = None          # current highest bid holder, a client id d
         self.min_increment      = None           # current minimum increment of the item under auction
+        self.num_mi             = None          # number of minimum increment
         self.bin_price          = None
         
 
@@ -27,7 +28,6 @@ class client(object):
         	current price: 		{self.current_price}
         	current bid owner: 	{self.current_owner}
         	current MI: 		{self.min_increment}
-                my price                {self.my_price}
         	''')
     # Registers this user to server.
     def register(self):
@@ -39,15 +39,21 @@ class client(object):
                 self.balance < self.current_price + self.min_increment:
             return False
         else:
-            self.my_price = self.current_price + 1 * self.min_increment
+            max_inc = max(self.balance - self.current_price)
+            self.num_mi = randint(1, (self.balance - self.current_price) // self.min_increment)
             return True
 
     # (TODO) Executes the loop to decide to bid or go to sleep. 
     def bidding(self):
         while self.receive(req.get(SERVER + '/getItemInfo').json()) is not None:
             if self.bid():
+                self.receive(req.post(SERVER + '/bid', data={\
+                        'username' : self.usernemae, \
+                        'current_price' : self.current_price, \
+                        'num_mi' : self.num_mi}))
                 print('Bid!') 
             else:
+                time.sleep(3)
                 print('No bid.')
         return
 
@@ -84,6 +90,6 @@ class client(object):
         return True
 
 if __name__ == '__main__':
-    c = client('test_name')
+    c = client('testname')
     c.register()
-    c.bidding()
+    #c.bidding()
