@@ -63,7 +63,7 @@ class client(object):
                 self.receive('bid', req.post(self.SERVER + '/bidding', data={\
                         'username' : self.username, \
                         'current_price' : self.current_price, \
-                        'num_mi' : self.n_increment}))
+                        'num_mi' : self.n_increment}).json())
                 print('Bid!') 
             else:
                 time.sleep(3)
