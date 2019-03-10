@@ -15,6 +15,7 @@ class client(object):
         self.n_increment        = None          # number of increment
         self.bin_price          = None
         self.SERVER             = server
+        self.receive('update', req.get('http://'+ self.SERVER + '/getItemInfo').json())
         print(f'''
                 Username:{self.username}
                 Budget: {self.budget}

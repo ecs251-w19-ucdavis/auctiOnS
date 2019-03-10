@@ -17,6 +17,7 @@ router.post('/register', async (req, res) => {
 router.get('/getItemInfo', async (req, res) => {
     try {
         const data = await queries.Auction.getItemInfo()
+
         res.json(data[0])
     }
     catch(e) {
@@ -25,9 +26,9 @@ router.get('/getItemInfo', async (req, res) => {
 })
 router.post('/bidding', async (req, res) => {
     //{'username' : string , 'current_price' : string, 'num_mi' : string}
-    const name = res.body.username
-    const current_price = res.body.current_price
-    const num_mi = res.body.num_mi
+    const name = req.body.username
+    const current_price = req.body.current_price
+    const num_mi = req.body.num_mi
 
     try {
         const d = await queries.Auction.bidding(name, current_price, num_mi)
