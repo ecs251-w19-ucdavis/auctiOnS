@@ -7,25 +7,27 @@ import numpy as np
 class client(object):
     def __init__(self, username, budget, server):
         self.username           = username          # username for this client
-        self.budget             = budget            # current budget of the client, part of bidding decision factor
+        self.budget             = int(budget)            # current budget of the client, part of bidding decision factor
         self.item_name          = None              # current item id that's in auction
         self.current_price      = None              # current bid amount
         self.current_owner      = None          # current highest bid holder, a client id d
         self.increment          = None           # current increment of the item under auction
         self.n_increment        = None          # number of increment
         self.bin_price          = None
-        self.SERVER             = server
+        self.SERVER             = 'http://' + server
         print(f'''
                 Username:{self.username}
                 Budget: {self.budget}
                 Server: {self.SERVER}
                 ''')
+        self.receive('update', req.get(self.SERVER + '/getItemInfo').json())
         
 
     def show(self):
         # show client status
         print(f'''
         	Item: 		        {self.item_name}
+                Buy it now              {self.bin_price}
         	Current price: 		{self.current_price}
         	Current bid owner: 	{self.current_owner}
         	Current increment: 	{self.increment}
@@ -51,17 +53,17 @@ class client(object):
             max_inc = min(self.budget, self.bin_price) - self.current_price
             max_num_mi = min(max_inc // self.increment, 5)
 
-            self.num_mi = self.select_num_mi(max_num_mi)
+            self.n_increment = self.select_num_mi(max_num_mi)
             return True
 
     # (TODO) Executes the loop to decide to bid or go to sleep. 
     def bidding(self):
         while self.receive('update', req.get(self.SERVER + '/getItemInfo').json()) is not None:
             if self.bid():
-                self.receive('bid', req.post(self.SERVER + '/bid', data={\
+                self.receive('bid', req.post(self.SERVER + '/bidding', data={\
                         'username' : self.username, \
                         'current_price' : self.current_price, \
-                        'num_mi' : self.num_mi}))
+                        'num_mi' : self.n_increment}))
                 print('Bid!') 
             else:
                 time.sleep(3)
@@ -70,18 +72,18 @@ class client(object):
 
     # (TODO) Updates local information according to server response.
     def receive(self, operation, response):
+        print(response)
         if not response:
             print('Error response received.')
             return None
         # Updates item information from server.
         else:
-            print(response)
             self.current_price = response['current_price']
             self.current_owner = response['current_owner']
             if 'update' in operation:
                 print('getItemInfo')
                 self.bin_price = response['bin_price']
-                self.increment = response['increment']
+                self.increment = response['min_increment']
                 self.show()
     	    ## Handles bidding response.
             elif 'bid' in operation:
@@ -91,6 +93,7 @@ class client(object):
                     print('Bid reject')
             else:
                 print('Unknow operation.')
+            return response
 
 def process_commands():
     parser = argparse.ArgumentParser(description="Client of auctiOnS.")
@@ -102,4 +105,4 @@ def process_commands():
 if __name__ == '__main__':
     args = process_commands()
     c = client(args.username, args.budget, args.address)
-    #c.bidding()
+    c.bidding()
