@@ -59,6 +59,9 @@ class client(object):
     # (TODO) Executes the loop to decide to bid or go to sleep. 
     def bidding(self):
         while self.receive('update', req.get(self.SERVER + '/getItemInfo').json()) is not None:
+            if self.current_price >= self.bin_price:
+                print(f'''Auction is ended, final winner is {self.current_owner}''')
+                break
             if self.bid():
                 self.receive('bid', req.post(self.SERVER + '/bidding', data={\
                         'username' : self.username, \
