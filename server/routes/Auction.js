@@ -24,6 +24,15 @@ router.get('/getItemInfo', async (req, res) => {
         console.log(e)
     }
 })
+router.get('/getLogs', async (req, res) => {
+    try {
+        const data = await queries.Auction.getLogs()
+        res.json(data)
+    }
+    catch(e) {
+        console.log(e)
+    }
+})
 router.post('/bidding', async (req, res) => {
     //{'username' : string , 'current_price' : string, 'num_mi' : string}
     const name = req.body.username
