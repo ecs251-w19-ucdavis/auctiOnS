@@ -75,7 +75,6 @@ class client(object):
 
     # (TODO) Updates local information according to server response.
     def receive(self, operation, response):
-        print(response)
         if not response:
             print('Error response received.')
             return None
@@ -84,7 +83,7 @@ class client(object):
             self.current_price = response['current_price']
             self.current_owner = response['current_owner']
             if 'update' in operation:
-                print('getItemInfo')
+                self.item_name = response['item_name']
                 self.bin_price = response['bin_price']
                 self.increment = response['min_increment']
                 self.show()

@@ -34,10 +34,10 @@ module.exports = {
             return new Promise ((resolve, reject) => {
                 knex.transaction( async function(t){
                     try {
-                        const server_id = 0
+                        const server_id = 1
                         const item = await knex('Item').where({id: 1})
                         const current_price = item[0].current_price
-                        const bid_price = client_current_price + num_mi * item[0].min_increment
+                        const bid_price = parseInt(client_current_price) + parseInt(num_mi) * item[0].min_increment
                         const data_from_client = {'type': 'request', 'username' : name , 'current_price' : client_current_price, 'num_mi' : num_mi, 'server_id': server_id}
                         await knex('Logs').insert({'logs': JSON.stringify(data_from_client)})
 
