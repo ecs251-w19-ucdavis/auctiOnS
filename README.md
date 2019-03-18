@@ -14,18 +14,36 @@ Distributed Auction System
 
 ## Implementations
 
-### (TODO: Kevin) Server
+### Server
+`Node.js` `Express` `Knex` `MySQL`
+
 
 ### (TODO: Tyler) Part of Client
 
 ### (TODO: Daniel) Part of Client
 
-## How to run
 
-### (TODO: Kevin)Server Configuration
 
+### Getting Started
+In order to run the server, make sure that you have [Node](https://nodejs.org/en/) version 6.0.0 or higher.
+
+First we have to go into the `server` directory to install all the dependencies.
+```
+$ cd server/
+```
+```
+$ npm install
+```
 ### Start the server
+Inside the `server` directory simply run
+```
+$ npm start
+```
+The server will now run at `localhost:3001`
+
 
 ### Start the client
-
+```
+$ python3 client.py -u username -b budget -a server_url
+```
 ## (Daniel) Result
