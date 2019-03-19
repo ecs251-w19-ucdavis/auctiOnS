@@ -12,7 +12,7 @@ Distributed Auction System
 
 ## System Structure
 ![structure]
-(https://github.com/ecs251-w19-ucdavis/auctiOnS/blob/master/structure.png)
+(structure.png)
 
 ## Implementations
 
