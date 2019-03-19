@@ -11,6 +11,8 @@ Distributed Auction System
 [2019 03 04](meetings/20190304.md) Design Document updates
 
 ## System Structure
+![structure]
+(https://github.com/ecs251-w19-ucdavis/auctiOnS/blob/master/structure.png)
 
 ## Implementations
 
