@@ -11,8 +11,7 @@ Distributed Auction System
 [2019 03 04](meetings/20190304.md) Design Document updates
 
 ## System Structure
-![structure]
-(structure.png)
+![structure](./structure.png)
 
 ## Implementations
 
