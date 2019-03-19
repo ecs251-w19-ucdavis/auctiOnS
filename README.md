@@ -28,7 +28,9 @@ getItemInfo: function() {
 }
 ```
 
-`/bidding`: post a bid to the server
+`/bidding`: Post a bid to the server, then the server will check whether the current price is matched with database,
+if true, then compared the bidding price, otherwise reject the bidding request and send most updated infomation to
+the client.
 
 ```javascript
 bidding: function(name, client_current_price, num_mi) {
@@ -69,8 +71,6 @@ bidding: function(name, client_current_price, num_mi) {
                   return reject(data)
               }
           }
-          catch(e) {
-              console.log(e)
           }
       })
   })
@@ -79,8 +79,16 @@ bidding: function(name, client_current_price, num_mi) {
 
 ### Client
 
+Client will have a username, budget, and the address of the server. The client will continuously update item info from the server. After received info, it will
+decide whether to bid or not by the random algorithm with parameters like current price. If the client decided to bid, it sends a bidding request through /bidding route
+and the server will repsonse whether the bidding is accepted or rejected.
 
-#### (TODO: Daniel) Client functions
+#### Client functions
+
+```bid {}``` : Used to decide thether to bid or not.
+
+```bidding()``` : The loop which is executed untill the auction is closed or the client is run ot of money.
+
 
 #### Client bidding algorithm
 During bidding, after check and updating the local listing information with the server, the client will use a randomized algorithm to decide whether to make a higher bid or not. 
