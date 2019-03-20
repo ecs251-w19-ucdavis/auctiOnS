@@ -86,9 +86,9 @@ and the server will repsonse whether the bidding is accepted or rejected.
 
 #### Client functions
 
-```bid {}``` : Used to decide thether to bid or not.
+`bid {}` : Used to decide thether to bid or not.
 
-```bidding()``` : The loop which is executed untill the auction is closed or the client is run ot of money.
+`bidding()` : The loop which is executed untill the auction is closed or the client is run ot of money.
 
 
 #### Client bidding algorithm
@@ -125,3 +125,6 @@ The server will now run at `localhost:3001`
 $ python3 client.py -u username -b budget -a server_url
 ```
 ## (Daniel) Result
+
+![incrementVSaccept/reject](./incVSaj.png)
+![incrementVSrequest](./incVSreq.png)
