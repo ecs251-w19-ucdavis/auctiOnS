@@ -124,7 +124,12 @@ The server will now run at `localhost:3001`
 ```
 $ python3 client.py -u username -b budget -a server_url
 ```
-## (Daniel) Result
+## Result
+
+We do our experiment on various minimum increments with fixed budget for every client. We want to see the relationship and effectness of increment to both 
+number of requests and ratio of accept/reject in an auction. The result shows that as the increment increase, the request decrease. The reason behind this is 
+that the price of item increase rapidly and cause the auction ends soon, which is as our expectation. On the other hand, we find something interesting that
+the ratio of accept and reject is almost fixed.
 
 ![incrementVSaccept/reject](./incVSaj.png)
 ![incrementVSrequest](./incVSreq.png)
